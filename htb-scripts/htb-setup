@@ -21,3 +21,8 @@ ln -sf $HOME/.local/doc/vpn $HOME/
 ln -sf $HOME/.local/src/go $HOME/code/
 ln -sf $HOME/.local/src/py $HOME/code/
 ln -sf $HOME/.local/src/c $HOME/code/
+
+rm -r $HOME/Templates/
+rm -r $HOME/Pictures/
+rm -r $HOME/Videos/
+rm -r $HOME/Music/

@@ -237,9 +237,14 @@ fi
 
 
 # custom aliases
+alias clearr="clear && echo '' > ~/.zsh_history"
+alias syu="sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove"
 alias v="vim"
 alias nv="nvim"
-alias clearr="clear && echo '' > ~/.zsh_history"
+alias cme="crackmapexec"
+alias hst="sudo vim /etc/hosts"
+
+
 
 # add ~/.local/bin to PATH if existing
 if [[ "$PATH" =~ (^|:)"$HOME/.local/bin"(|/)(:|$) ]]; then

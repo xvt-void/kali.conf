@@ -1,24 +1,19 @@
 #!/bin/zsh
 
-helpF()
-{
-        echo "usage: htb-keygen username"
-        exit 1 
-}
-
 keyout()
 {
         if [ "$name" = "root" ];
         then
-                echo "echo \"$b64pkey\" | base64 -d > /$name/.ssh/authorized_keys"
+                echo "echo \"$b64pkey\" | base64 -d > /$name/.ssh/authorized_keys && chmod 600 /home/$name/.ssh/authorized_keys"
         else
-                echo "echo \"$b64pkey\" | base64 -d > /home/$name/.ssh/authorized_keys"
+                echo "echo \"$b64pkey\" | base64 -d > /home/$name/.ssh/authorized_keys && chmod 600 /home/$name/.ssh/authorized_keys"
         fi
 }
 
 if [ -z "$1" ];
 then
-        helpF
+        echo "usage: htb-keygen username"
+        exit 1
 else
         name="$1"
         file="$1.id_rsa"
