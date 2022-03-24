@@ -239,10 +239,13 @@ fi
 # custom aliases
 alias clearr="clear && echo '' > ~/.zsh_history"
 alias syu="sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove"
+alias Ss="sudo apt search"
+alias S="sudo apt install"
 alias v="vim"
 alias nv="nvim"
 alias cme="crackmapexec"
 alias hst="sudo vim /etc/hosts"
+alias loc="plocate"
 
 
 

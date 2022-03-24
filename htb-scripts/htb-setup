@@ -6,6 +6,8 @@ mkdir -p $HOME/.local/doc/vpn
 mkdir -p $HOME/.local/doc/HTB
 mkdir -p $HOME/.local/doc/THM
 
+mkdir -p $HOME/.vim/undodir
+
 mkdir -p $HOME/.local/src/go
 mkdir -p $HOME/.local/src/py
 mkdir -p $HOME/.local/src/c
