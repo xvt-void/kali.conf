@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+mkdir -p $HOME/.local/bin
+mkdir -p $HOME/.local/src
+mkdir -p $HOME/.local/doc/vpn
+mkdir -p $HOME/.local/doc/HTB
+mkdir -p $HOME/.local/doc/THM
+
+mkdir -p $HOME/.vim/undodir
+
+mkdir -p $HOME/.local/src/go
+mkdir -p $HOME/.local/src/py
+mkdir -p $HOME/.local/src/c
+mkdir -p $HOME/.local/src/go/bin
+mkdir -p $HOME/.local/src/go/src
+mkdir -p $HOME/.local/src/go/pkg
+
+mkdir -p $HOME/code
+
+ln -sf $HOME/.local/bin $HOME/
+ln -sf $HOME/.local/doc $HOME/
+ln -sf $HOME/.local/doc/vpn $HOME/
+ln -sf $HOME/.local/src/go $HOME/code/
+ln -sf $HOME/.local/src/py $HOME/code/
+ln -sf $HOME/.local/src/c $HOME/code/
+
+rm -r $HOME/Templates/
+rm -r $HOME/Pictures/
+rm -r $HOME/Videos/
+rm -r $HOME/Music/
