@@ -4,7 +4,7 @@ keyout()
 {
         if [ "$name" = "root" ];
         then
-                echo "echo \"$b64pkey\" | base64 -d > /$name/.ssh/authorized_keys && chmod 600 /home/$name/.ssh/authorized_keys"
+                echo "echo \"$b64pkey\" | base64 -d > /$name/.ssh/authorized_keys && chmod 600 /$name/.ssh/authorized_keys"
         else
                 echo "echo \"$b64pkey\" | base64 -d > /home/$name/.ssh/authorized_keys && chmod 600 /home/$name/.ssh/authorized_keys"
         fi
