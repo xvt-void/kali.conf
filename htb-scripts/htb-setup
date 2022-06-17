@@ -28,3 +28,4 @@ rm -r $HOME/Templates/
 rm -r $HOME/Pictures/
 rm -r $HOME/Videos/
 rm -r $HOME/Music/
+rm -r $HOME/Public/
