@@ -15,20 +15,18 @@ export EDITOR="vim"
 export VISUAL="vim"
 
 # configure key keybindings
-bindkey -e                                              # emacs key bindings
-bindkey ' '             magic-space                     # do history expansion on space
-bindkey '^U'            backward-kill-line              # ctrl + U
-bindkey '^[[3;5~'       kill-word                       # ctrl + Supr
-bindkey '^[[3~'         delete-char                     # delete
-bindkey '^[[1;5C'       forward-word                    # ctrl + ->
-bindkey '^[[1;5D'       backward-word                   # ctrl + <-
-bindkey '^[[1;3C'       forward-word                    # alt + ->
-bindkey '^[[1;3D'       backward-word                   # alt + <-
-bindkey '^[[5~'         beginning-of-buffer-or-history  # page up
-bindkey '^[[6~'         end-of-buffer-or-history        # page down
-bindkey '^[[H'          beginning-of-line               # home
-bindkey '^[[F'          end-of-line                     # end
-bindkey '^[[Z'          undo                            # shift + tab undo last action
+bindkey -e                                        # emacs key bindings
+bindkey ' ' magic-space                           # do history expansion on space
+bindkey '^U' backward-kill-line                   # ctrl + U
+bindkey '^[[3;5~' kill-word                       # ctrl + Supr
+bindkey '^[[3~' delete-char                       # delete
+bindkey '^[[1;5C' forward-word                    # ctrl + ->
+bindkey '^[[1;5D' backward-word                   # ctrl + <-
+bindkey '^[[5~' beginning-of-buffer-or-history    # page up
+bindkey '^[[6~' end-of-buffer-or-history          # page down
+bindkey '^[[H' beginning-of-line                  # home
+bindkey '^[[F' end-of-line                        # end
+bindkey '^[[Z' undo                               # shift + tab undo last action
 
 # enable completion features
 autoload -Uz compinit
@@ -49,18 +47,22 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # History configurations
 HISTFILE=~/.zsh_history
-HISTSIZE=60000
-SAVEHIST=60000
+HISTSIZE=8000
+SAVEHIST=8000
 setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
 setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
+#setopt share_history         # share command history data
 
 # force zsh to show the complete history
 alias history="history 0"
 
 # configure `time` format
 TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
+
+# make less more friendly for non-text input files, see lesspipe(1)
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
@@ -90,11 +92,13 @@ fi
 
 configure_prompt() {
     prompt_symbol=㉿
-    [ "$EUID" -eq 0 ] && prompt_symbol=💀
+    # Skull emoji for root terminal
+    #[ "$EUID" -eq 0 ] && prompt_symbol=💀
     case "$PROMPT_ALTERNATIVE" in
         twoline)
-            PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
-            RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+            PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n'$prompt_symbol$'%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+            # Right-side prompt with exit codes and background processes
+            #RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
             ;;
         oneline)
             PROMPT=$'${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%B%F{%(#.red.blue)}%n@%m%b%F{reset}:%B%F{%(#.blue.green)}%~%b%F{reset}%(#.#.$) '
@@ -105,6 +109,7 @@ configure_prompt() {
             RPROMPT=
             ;;
     esac
+    unset prompt_symbol
 }
 
 # The following block is surrounded by two delimiters.
@@ -121,43 +126,43 @@ if [ "$color_prompt" = yes ]; then
     configure_prompt
 
     # enable syntax-highlighting
-    if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && [ "$color_prompt" = yes ]; then
+    if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
         . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
         ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
         ZSH_HIGHLIGHT_STYLES[default]=none
-        ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold
+        ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=white,underline
         ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=cyan,bold
         ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[global-alias]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[global-alias]=fg=green,bold
         ZSH_HIGHLIGHT_STYLES[precommand]=fg=green,underline
         ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[autodirectory]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[path]=underline
+        ZSH_HIGHLIGHT_STYLES[path]=bold
         ZSH_HIGHLIGHT_STYLES[path_pathseparator]=
         ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=
         ZSH_HIGHLIGHT_STYLES[globbing]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[command-substitution]=none
-        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta,bold
         ZSH_HIGHLIGHT_STYLES[process-substitution]=none
-        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta,bold
+        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=green
+        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=green
         ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
         ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
         ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=yellow
         ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=yellow
         ZSH_HIGHLIGHT_STYLES[rc-quote]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=magenta,bold
+        ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=magenta,bold
+        ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=fg=magenta,bold
         ZSH_HIGHLIGHT_STYLES[assign]=none
         ZSH_HIGHLIGHT_STYLES[redirection]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[comment]=fg=black,bold
         ZSH_HIGHLIGHT_STYLES[named-fd]=none
         ZSH_HIGHLIGHT_STYLES[numeric-fd]=none
-        ZSH_HIGHLIGHT_STYLES[arg0]=fg=green
+        ZSH_HIGHLIGHT_STYLES[arg0]=fg=cyan
         ZSH_HIGHLIGHT_STYLES[bracket-error]=fg=red,bold
         ZSH_HIGHLIGHT_STYLES[bracket-level-1]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[bracket-level-2]=fg=green,bold
@@ -167,7 +172,7 @@ if [ "$color_prompt" = yes ]; then
         ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]=standout
     fi
 else
-    PROMPT='${debian_chroot:+($debian_chroot)}%n@%m:%~%# '
+    PROMPT='${debian_chroot:+($debian_chroot)}%n@%m:%~%(#.#.$) '
 fi
 unset color_prompt force_color_prompt
 
@@ -209,6 +214,8 @@ precmd() {
 # enable color support of ls, less and man, and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    export LS_COLORS="$LS_COLORS:ow=30;44:" # fix ls color for folders with 777 permissions
+
     alias ls='ls --color=auto'
     alias l="ls -F"
     alias ll="ls -lhF"
@@ -234,11 +241,9 @@ if [ -x /usr/bin/dircolors ]; then
     zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 fi
 
-
-
 # custom aliases
 alias clearr="clear && echo '' > ~/.zsh_history"
-alias syu="sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove"
+alias Syu="sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove"
 alias Ss="sudo apt search"
 alias S="sudo apt install"
 alias v="vim"
@@ -247,13 +252,11 @@ alias cme="crackmapexec"
 alias hst="sudo vim /etc/hosts"
 alias loc="plocate"
 
-
-
 # add ~/.local/bin to PATH if existing
 if [[ "$PATH" =~ (^|:)"$HOME/.local/bin"(|/)(:|$) ]]; then
 
-    else
-            export PATH=$PATH:"$HOME/.local/bin/"
+        else
+                export PATH=$PATH:"$HOME/.local/bin/"
 fi
 
 # go env
@@ -261,11 +264,9 @@ export GOPATH="$HOME/.local/src/go"
 export GOBIN="$GOPATH/bin"
 if [[ "$PATH" =~ (^|:)"$GOBIN"(|/)(:|$) ]]; then
 
-    else
-            export PATH=$PATH:"$GOBIN"
+        else
+                        export PATH=$PATH:"$GOBIN"
 fi
-
-
 
 # enable auto-suggestions based on the history
 if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
