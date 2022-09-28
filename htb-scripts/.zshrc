@@ -250,7 +250,8 @@ alias v="vim"
 alias nv="nvim"
 alias cme="crackmapexec"
 alias hst="sudo vim /etc/hosts"
-alias loc="plocate"
+alias pysrv="python3 -m http.server 80"
+alias mtu="sudo ip li set mtu 1200 dev tun0"
 
 # add ~/.local/bin to PATH if existing
 if [[ "$PATH" =~ (^|:)"$HOME/.local/bin"(|/)(:|$) ]]; then
