@@ -250,7 +250,7 @@ alias nv="nvim"
 alias cme="crackmapexec"
 alias hst="sudo vim /etc/hosts"
 alias prxy="sudo vim /etc/proxychains4.conf"
-alias pysrv="python3 -m http.server 80"
+alias pysrv="python3 -m http.server "
 alias mtu="sudo ip li set mtu 1200 dev tun0"
 
 # add ~/.local/bin to PATH if existing
