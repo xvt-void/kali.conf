@@ -258,11 +258,12 @@ alias Syu='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove'
 alias Ss='sudo apt search'
 alias S='sudo apt install'
 alias nv='nvim'
-alias cme='crackmapexec'
 alias hst='sudo vim /etc/hosts'
 alias prxy='sudo vim /etc/proxychains4.conf'
+alias ipfw='echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward'
 alias pysrv='python3 -m http.server'
 alias mtu='sudo ip li set mtu 1200 dev tun0'
+alias cme='crackmapexec'
 alias certipy='certipy-ad'
 
 # enable auto-suggestions based on the history
