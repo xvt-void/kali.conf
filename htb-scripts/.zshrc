@@ -1,4 +1,8 @@
+# ~/.zshrc file for zsh interactive shells.
+# see /usr/share/doc/zsh/examples/zshrc for examples
+
 setopt autocd              # change directory just by typing its name
+#setopt correct            # auto correct mistakes
 setopt interactivecomments # allow comments in interactive mode
 setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
 setopt nonomatch           # hide error message if there is no match for the pattern
@@ -31,7 +35,7 @@ bindkey '^[[Z' undo                               # shift + tab undo last action
 # enable completion features
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump
-zstyle ':completion:*:*:*:*' menu select
+zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete
 zstyle ':completion:*' format 'Completing %d'
@@ -217,16 +221,15 @@ if [ -x /usr/bin/dircolors ]; then
     export LS_COLORS="$LS_COLORS:ow=30;44:" # fix ls color for folders with 777 permissions
 
     alias ls='ls --color=auto'
-    alias l="ls -F"
-    alias ll="ls -lhF"
-    alias la="ls -alhF"
-    
-    alias diff='diff --color=auto'
-    alias ip='ip --color=auto'
-    
+
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+    alias diff='diff --color=auto'
+    alias ip='ip --color=auto'
 
     export LESS_TERMCAP_mb=$'\E[1;31m'     # begin blink
     export LESS_TERMCAP_md=$'\E[1;36m'     # begin bold
@@ -241,33 +244,26 @@ if [ -x /usr/bin/dircolors ]; then
     zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 fi
 
+# some more ls aliases
+# alias ll='ls -l'
+# alias la='ls -A'
+# alias l='ls -CF'
+
 # custom aliases
-alias clearr="clear && echo '' > ~/.zsh_history"
-alias Syu="sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove"
-alias Ss="sudo apt search"
-alias S="sudo apt install"
-alias nv="nvim"
-alias cme="crackmapexec"
-alias hst="sudo vim /etc/hosts"
-alias prxy="sudo vim /etc/proxychains4.conf"
-alias pysrv="python3 -m http.server "
-alias mtu="sudo ip li set mtu 1200 dev tun0"
-
-# add ~/.local/bin to PATH if existing
-if [[ "$PATH" =~ (^|:)"$HOME/.local/bin"(|/)(:|$) ]]; then
-
-        else
-                export PATH=$PATH:"$HOME/.local/bin/"
-fi
-
-# go env
-export GOPATH="$HOME/.local/src/go"
-export GOBIN="$GOPATH/bin"
-if [[ "$PATH" =~ (^|:)"$GOBIN"(|/)(:|$) ]]; then
-
-        else
-                        export PATH=$PATH:"$GOBIN"
-fi
+alias l='ls -F'
+alias ll='ls -lhF'
+alias la='ls -alhF'
+alias clearr='clear && echo "" > ~/.zsh_history'
+alias Syu='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove'
+alias Ss='sudo apt search'
+alias S='sudo apt install'
+alias nv='nvim'
+alias cme='crackmapexec'
+alias hst='sudo vim /etc/hosts'
+alias prxy='sudo vim /etc/proxychains4.conf'
+alias pysrv='python3 -m http.server'
+alias mtu='sudo ip li set mtu 1200 dev tun0'
+alias certipy='certipy-ad'
 
 # enable auto-suggestions based on the history
 if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
@@ -279,4 +275,43 @@ fi
 # enable command-not-found if installed
 if [ -f /etc/zsh_command_not_found ]; then
     . /etc/zsh_command_not_found
+fi
+
+
+
+
+# add ~/.local/bin to PATH
+if [[ "$PATH" =~ (^|:)"$HOME/.local/bin"(|/)(:|$) ]];
+then
+
+else
+        export PATH=$PATH:"$HOME/.local/bin/"
+fi
+
+# go env
+export GOPATH="$HOME/.local/src/go"
+export GOBIN="$GOPATH/bin"
+if [[ "$PATH" =~ (^|:)"$GOBIN"(|/)(:|$) ]];
+then
+
+else
+        export PATH=$PATH:"$GOBIN"
+fi
+
+# nim env
+export NIMBIN="$HOME/.nimble/bin"
+if [[ "$PATH" =~ (^|:)"$NIMBIN"(|/)(:|$) ]];
+then
+
+else
+        export PATH=$PATH:"$NIMBIN"
+fi
+
+# rust env
+export CARGOBIN="$HOME/.cargo/bin"
+if [[ "$PATH" =~ (^|:)"$CARGOBIN"(|/)(:|$) ]];
+then
+
+else
+        export PATH=$PATH:"$CARGOBIN"
 fi
