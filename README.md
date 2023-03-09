@@ -1,3 +1,3 @@
 # htb-notes
 
-you might need to unix2dox these files
+you might need to dos2unix these files
