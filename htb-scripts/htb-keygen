@@ -1,33 +1,29 @@
 #!/bin/zsh
-
 keyout()
 {
-        if [ "$name" = "root" ];
-        then
-                echo "echo \"$b64pkey\" | base64 -d > /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"
-        elif [ "$name" = "www-data" ];
-        then
-                echo "echo \"$b64pkey\" | base64 -d > /var/www/.ssh/authorized_keys && chmod 600 /var/www/.ssh/authorized_keys"
-        else
-                echo "echo \"$b64pkey\" | base64 -d > /home/$name/.ssh/authorized_keys && chmod 600 /home/$name/.ssh/authorized_keys"
-        fi
+    ([[ "$name" = "root" ]] && userprofile="/root" ||)
+    ([[ "$name" = "www-data" ]] && userprofile="/var/www" ||)
+    userprofile="/home/$name";
+   
+    echo "mkdir -p ${userprofile}/.ssh/ && echo ${b64pkey} | base64 -d >> ${userprofile}/.ssh/authorized_keys && chmod 600 ${userprofile}/.ssh/authorized_keys"
 }
 
-if [ -z "$1" ];
+if [ $# -le 1  ] || [[ "$2" != ("rsa"||"ed25519") ]];
 then
-        echo "usage: htb-keygen username"
-        exit 1
+    echo "usage: htb-keygen username rsa|ed25519"
+    exit 1
 else
-        name="$1"
-        file="$1.id_rsa"
+    name="$1"
+    algo="$2"
+    file="$name.id_$algo"
 
-        if [ -z $(find ./ -type f -name $file 2>/dev/null) ] && [ -z $(find ./ -type f -name $file.pub 2>/dev/null) ];
-        then
-                b64pkey=$(ssh-keygen -q -t rsa -f "./$file" -N "" && cat $file.pub | cut -d' ' -f1,2 | base64 -w0)
-                keyout
-        else
-                rm -f ./$file ./$file.pub
-                b64pkey=$(ssh-keygen -q -t rsa -f "./$file" -N "" && cat $file.pub | cut -d' ' -f1,2 | base64 -w0)
-                keyout
-        fi
+    if [ -z $(find ./ -type f -name $file 2>/dev/null) ] && [ -z $(find ./ -type f -name $file.pub 2>/dev/null) ];
+    then
+        b64pkey=$(ssh-keygen -q -t $algo -f "./$file" -N "" -C "" && cat $file.pub | cut -d' ' -f1,2 | base64 -w0)
+        keyout
+    else
+        rm -f ./$file ./$file.pub
+        b64pkey=$(ssh-keygen -q -t $algo -f "./$file" -N "" -C "" && cat $file.pub | cut -d' ' -f1,2 | base64 -w0)
+        keyout
+    fi
 fi
